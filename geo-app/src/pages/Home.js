@@ -86,6 +86,22 @@ export default function Home() {
         </div>
       )}
 
+      <div className="mt-4 flex gap-2">
+        <input
+          type="text"
+          className="border p-2 flex-1"
+          placeholder="Enter IP address"
+          value={ip}
+          onChange={(e) => setIp(e.target.value)}
+        />
+        <button onClick={() => fetchGeo(ip)} className="bg-blue-500 text-white px-3 py-1 rounded">
+          Search
+        </button>
+        <button onClick={() => { setIp(""); fetchGeo(); }} className="bg-gray-500 text-white px-3 py-1 rounded">
+          Clear
+        </button>
+      </div>
+
       {geo && geo.loc && (
         <div className="mt-4">
           <MapContainer center={geo.loc.split(',').map(Number)} zoom={13} style={{ height: '400px', width: '100%' }}>
@@ -102,22 +118,6 @@ export default function Home() {
           </MapContainer>
         </div>
       )}
-
-      <div className="mt-4 flex gap-2">
-        <input
-          type="text"
-          className="border p-2 flex-1"
-          placeholder="Enter IP address"
-          value={ip}
-          onChange={(e) => setIp(e.target.value)}
-        />
-        <button onClick={() => fetchGeo(ip)} className="bg-blue-500 text-white px-3 py-1 rounded">
-          Search
-        </button>
-        <button onClick={() => { setIp(""); fetchGeo(); }} className="bg-gray-500 text-white px-3 py-1 rounded">
-          Clear
-        </button>
-      </div>
 
       <h3 className="mt-6 font-semibold">History</h3>
       <div className="flex justify-end">
