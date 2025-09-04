@@ -28,6 +28,10 @@ export default function Home() {
     window.location.href = "/login";
   };
 
+  const removeHistory = (index) => {
+    setHistory(history.filter((_, i) => i !== index));
+  };
+
   return (
     <div className="p-6">
       <div className="flex justify-between">
@@ -66,8 +70,9 @@ export default function Home() {
       <h3 className="mt-6 font-semibold">History</h3>
       <ul className="list-disc ml-5">
         {history.map((h, i) => (
-          <li key={i} onClick={() => fetchGeo(h.ip)} className="cursor-pointer text-blue-600">
-            {h.ip} - {h.city}, {h.country}
+          <li key={i} className="cursor-pointer text-blue-600 flex justify-between items-center">
+            <span onClick={() => fetchGeo(h.ip)}>{h.ip} - {h.city}, {h.country}</span>
+            <button onClick={() => removeHistory(i)} className="bg-red-500 text-white px-2 py-1 rounded ml-2">Remove</button>
           </li>
         ))}
       </ul>
