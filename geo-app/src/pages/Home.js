@@ -14,7 +14,11 @@ export default function Home() {
       const url = targetIp ? `${ipinfoUrl}/${targetIp}/geo` : `${ipinfoUrl}/geo`;
       const res = await axios.get(url);
       setGeo(res.data);
-      if (targetIp) setHistory((prev) => [...prev, res.data]);
+      if (targetIp) {
+        const newData = { id: Date.now(), ...res.data };
+        setHistory((prev) => [...prev, newData]);
+        console.log(newData);
+      }
     } catch {
       alert("Invalid IP address");
     }
@@ -29,16 +33,16 @@ export default function Home() {
     window.location.href = "/login";
   };
 
-  const handleCheckboxChange = (e, ip) => {
+  const handleCheckboxChange = (e, id) => {
     if (e.target.checked) {
-      setSelected([...selected, ip]);
+      setSelected([...selected, id]);
     } else {
-      setSelected(selected.filter(item => item !== ip));
+      setSelected(selected.filter(item => item !== id));
     }
   };
 
   const deleteSelected = () => {
-    setHistory(history.filter(item => !selected.includes(item.ip)));
+    setHistory(history.filter(item => !selected.includes(item.id)));
     setSelected([]);
   };
 
@@ -87,7 +91,7 @@ export default function Home() {
       <ul className="ml-5">
         {history.map((h, i) => (
           <li key={i}>
-            <input type="checkbox" onChange={(e) => handleCheckboxChange(e, h.ip)} />
+            <input type="checkbox" checked={selected.includes(h.id)} onChange={(e) => handleCheckboxChange(e, h.id)} />
             <span onClick={() => fetchGeo(h.ip)} className="ml-2 cursor-pointer text-blue-600">{h.ip} - {h.city}, {h.country}</span>
           </li>
         ))}
