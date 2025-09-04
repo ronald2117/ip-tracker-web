@@ -1,5 +1,25 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
+
+function ChangeView({ center, zoom }) {
+  const map = useMap();
+  useEffect(() => {
+    map.setView(center, zoom);
+  }, [center, zoom, map]);
+  return null;
+}
 
 export default function Home() {
   const [geo, setGeo] = useState(null);
@@ -63,6 +83,23 @@ export default function Home() {
           <p><b>Country:</b> {geo.country}</p>
           <p><b>Location:</b> {geo.loc}</p>
           { console.log(typeof geo.loc) }
+        </div>
+      )}
+
+      {geo && geo.loc && (
+        <div className="mt-4">
+          <MapContainer center={geo.loc.split(',').map(Number)} zoom={13} style={{ height: '400px', width: '100%' }}>
+            <ChangeView center={geo.loc.split(',').map(Number)} zoom={13} />
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <Marker position={geo.loc.split(',').map(Number)}>
+              <Popup>
+                {geo.ip}
+              </Popup>
+            </Marker>
+          </MapContainer>
         </div>
       )}
 
