@@ -5,6 +5,7 @@ export default function Home() {
   const [geo, setGeo] = useState(null);
   const [ip, setIp] = useState("");
   const [history, setHistory] = useState([]);
+  const [selected, setSelected] = useState([]);
 
   const ipinfoUrl = process.env.REACT_APP_IPINFO_URL;
 
@@ -20,7 +21,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchGeo(); // load current user's geo
+    fetchGeo(); 
   }, []);
 
   const logout = () => {
@@ -28,8 +29,17 @@ export default function Home() {
     window.location.href = "/login";
   };
 
-  const removeHistory = (index) => {
-    setHistory(history.filter((_, i) => i !== index));
+  const handleCheckboxChange = (e, ip) => {
+    if (e.target.checked) {
+      setSelected([...selected, ip]);
+    } else {
+      setSelected(selected.filter(item => item !== ip));
+    }
+  };
+
+  const deleteSelected = () => {
+    setHistory(history.filter(item => !selected.includes(item.ip)));
+    setSelected([]);
   };
 
   return (
@@ -48,6 +58,7 @@ export default function Home() {
           <p><b>Region:</b> {geo.region}</p>
           <p><b>Country:</b> {geo.country}</p>
           <p><b>Location:</b> {geo.loc}</p>
+          { console.log(typeof geo.loc) }
         </div>
       )}
 
@@ -68,11 +79,16 @@ export default function Home() {
       </div>
 
       <h3 className="mt-6 font-semibold">History</h3>
-      <ul className="list-disc ml-5">
+      <div className="flex justify-end">
+        <button onClick={deleteSelected} className="bg-red-500 text-white px-3 py-1 rounded mt-2">
+          Delete Selected
+        </button>
+      </div>
+      <ul className="ml-5">
         {history.map((h, i) => (
-          <li key={i} className="cursor-pointer text-blue-600 flex justify-between items-center">
-            <span onClick={() => fetchGeo(h.ip)}>{h.ip} - {h.city}, {h.country}</span>
-            <button onClick={() => removeHistory(i)} className="bg-red-500 text-white px-2 py-1 rounded ml-2">Remove</button>
+          <li key={i}>
+            <input type="checkbox" onChange={(e) => handleCheckboxChange(e, h.ip)} />
+            <span onClick={() => fetchGeo(h.ip)} className="ml-2 cursor-pointer text-blue-600">{h.ip} - {h.city}, {h.country}</span>
           </li>
         ))}
       </ul>
