@@ -26,6 +26,7 @@ export default function Home() {
   const [ip, setIp] = useState("");
   const [history, setHistory] = useState([]);
   const [selected, setSelected] = useState([]);
+  const [showDelete, setShowDelete] = useState(false);
 
   const ipinfoUrl = process.env.REACT_APP_IPINFO_URL;
 
@@ -47,6 +48,10 @@ export default function Home() {
   useEffect(() => {
     fetchGeo(); 
   }, []);
+  
+  useEffect(() => {
+    setShowDelete(selected.length > 0);
+  }, [selected]);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -120,11 +125,13 @@ export default function Home() {
       )}
 
       <h3 className="mt-6 font-semibold">History</h3>
-      <div className="flex justify-end">
-        <button onClick={deleteSelected} className="bg-red-500 text-white px-3 py-1 rounded mt-2">
-          Delete Selected
-        </button>
-      </div>
+      { (showDelete) && (
+        <div className="flex justify-end">
+          <button onClick={deleteSelected} className="bg-red-500 text-white px-3 py-1 rounded mt-2">
+            Delete Selected
+          </button>
+        </div>
+      )}
       <ul className="ml-5">
         {history.map((h, i) => (
           <li key={i}>
