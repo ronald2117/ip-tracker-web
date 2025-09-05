@@ -87,7 +87,9 @@ export default function Home() {
           <p><b>Region:</b> {geo.region}</p>
           <p><b>Country:</b> {geo.country}</p>
           <p><b>Location:</b> {geo.loc}</p>
-          { console.log(typeof geo.loc) }
+          <p><b>Organization:</b> {geo.org}</p>
+          <p><b>Postal:</b> {geo.postal}</p>
+          <p><b>Timezone:</b> {geo.timezone}</p>
         </div>
       )}
 
