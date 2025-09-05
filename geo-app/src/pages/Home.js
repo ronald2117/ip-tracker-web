@@ -126,6 +126,10 @@ export default function Home() {
         </div>
       )}
 
+      <div className="flex center mt-10">
+        <p className="text-gray-500">Powered by <a href="https://ipinfo.io" className="text-blue-600">IPinfo</a></p>
+      </div>
+
       <h3 className="mt-6 font-semibold">History</h3>
       { (showDelete) && (
         <div className="flex justify-end">
@@ -134,7 +138,7 @@ export default function Home() {
           </button>
         </div>
       )}
-      <ul className="ml-5">
+      <ul className="mx-5 mt-3">
         {history.map((h, i) => (
           <li key={i}>
             <input type="checkbox" checked={selected.includes(h.id)} onChange={(e) => handleCheckboxChange(e, h.id)} />
@@ -142,6 +146,9 @@ export default function Home() {
           </li>
         ))}
       </ul>
+      <div className="mt-4 text-center">
+        <p className="mx-auto">© 2025 Ronald Abel. All Rights Reserved.</p>
+      </div>
     </div>
   );
 }
